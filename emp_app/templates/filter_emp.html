@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Employee Search | Employee Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary-color) !important;
+        }
+        
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .page-title {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+        
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .search-tabs {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 2rem;
+        }
+        
+        .search-tabs .nav-link {
+            border: none;
+            color: #666;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px 8px 0 0;
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .search-tabs .nav-link.active {
+            color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .search-tabs .nav-link:hover:not(.active) {
+            color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+        
+        .form-section {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control, .form-select, .select2 {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus, .form-select:focus, .select2-container--focus .select2-selection {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+        
+        .select2-container--default .select2-selection--multiple {
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            min-height: 46px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(58, 12, 163, 0.3);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 10px;
+            padding: 0.5rem 1.5rem;
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+        
+        .search-options {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid #eaeaea;
+        }
+        
+        .filter-tag {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .filter-tag .close-btn {
+            margin-left: 0.5rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        
+        .results-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            margin-top: 2rem;
+        }
+        
+        .results-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .results-count {
+            font-size: 1.1rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .employee-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid #eee;
+            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary-color);
+        }
+        
+        .employee-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            margin-right: 1.5rem;
+        }
+        
+        .employee-info h5 {
+            margin-bottom: 0.25rem;
+            color: var(--dark-color);
+        }
+        
+        .employee-info p {
+            margin-bottom: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .department-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background-color: #e9ecef;
+            color: #495057;
+        }
+        
+        .salary-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background-color: #e8f5e8;
+            color: #2e7d32;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+        
+        .no-results i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .search-history {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .history-item {
+            padding: 0.75rem;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border-left: 4px solid var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .history-item:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+            transform: translateX(5px);
+        }
+        
+        .history-query {
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        .history-date {
+            font-size: 0.8rem;
+            color: #666;
+        }
+        
+        .saved-search {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #eaeaea;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .saved-search:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .advanced-options {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border: 1px solid #eaeaea;
+        }
+        
+        .form-check-label {
+            font-weight: 500;
+        }
+        
+        .range-slider-container {
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+        
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .search-type-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .badge-basic {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .badge-advanced {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success-color);
+        }
+        
+        @media (max-width: 768px) {
+            .search-container {
+                padding: 1.5rem;
+            }
+            
+            .employee-avatar {
+                width: 60px;
+                height: 60px;
+                margin-right: 1rem;
+            }
+            
+            .search-tabs .nav-link {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .export-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-users me-2"></i>EmpManagePro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/all_emp">All Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/add_emp">Add Employee</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/remove_emp">Remove Employee</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/filter_emp">Filter Employee</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Header -->
+    <div class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="page-title">Advanced Employee Search</h1>
+                    <p class="page-subtitle">Find employees using multiple criteria with powerful filtering options</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-search fa-5x" style="opacity: 0.8;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Search Tabs -->
+        <div class="search-tabs">
+            <ul class="nav nav-tabs border-0" id="searchTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="basic-tab" data-bs-toggle="tab" data-bs-target="#basic" type="button">
+                        <i class="fas fa-search me-2"></i>Basic Search
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="advanced-tab" data-bs-toggle="tab" data-bs-target="#advanced" type="button">
+                        <i class="fas fa-cogs me-2"></i>Advanced Search
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="saved-tab" data-bs-toggle="tab" data-bs-target="#saved" type="button">
+                        <i class="fas fa-bookmark me-2"></i>Saved Searches
+                    </button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="searchTabContent">
+            <!-- Basic Search Tab -->
+            <div class="tab-pane fade show active" id="basic" role="tabpanel">
+                <div class="search-container">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h4><i class="fas fa-search me-2 text-primary"></i>Quick Employee Search</h4>
+                            <p class="text-muted mb-0">Search employees by name, department, or role</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="search-type-badge badge-basic">Basic Search</span>
+                            <button class="btn btn-outline-primary btn-sm" id="clearBasicBtn">
+                                <i class="fas fa-redo me-1"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <form action="{% url 'filter_emp' %}" method="POST" id="basicSearchForm">
+                        {% csrf_token %}
+                        
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-user me-2"></i>Employee Information</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name" id="first_name" 
+                                           value="{{ first_name }}" placeholder="Enter first name">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name" id="last_name" 
+                                           value="{{ last_name }}" placeholder="Enter last name">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Name (Any Part)</label>
+                                    <input type="text" class="form-control" name="name" id="name" 
+                                           value="{{ name }}" placeholder="Search in first or last name">
+                                    <div class="form-text">Leave empty to search all employees</div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" name="phone" id="phone" 
+                                           value="{{ phone }}" placeholder="Enter phone number">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-briefcase me-2"></i>Job Details</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Department</label>
+                                    <select class="form-select" name="dept" id="dept">
+                                        <option value="">All Departments</option>
+                                        <option value="IT" {% if dept == "IT" %}selected{% endif %}>IT</option>
+                                        <option value="Sales" {% if dept == "Sales" %}selected{% endif %}>Sales</option>
+                                        <option value="Finance" {% if dept == "Finance" %}selected{% endif %}>Finance</option>
+                                        <option value="HR" {% if dept == "HR" %}selected{% endif %}>HR</option>
+                                        <option value="Marketing" {% if dept == "Marketing" %}selected{% endif %}>Marketing</option>
+                                        <option value="Operations" {% if dept == "Operations" %}selected{% endif %}>Operations</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Role</label>
+                                    <select class="form-select" name="role" id="role">
+                                        <option value="">All Roles</option>
+                                        <option value="Developer" {% if role == "Developer" %}selected{% endif %}>Developer</option>
+                                        <option value="Manager" {% if role == "Manager" %}selected{% endif %}>Manager</option>
+                                        <option value="Analyst" {% if role == "Analyst" %}selected{% endif %}>Analyst</option>
+                                        <option value="Support" {% if role == "Support" %}selected{% endif %}>Support</option>
+                                        <option value="Executive" {% if role == "Executive" %}selected{% endif %}>Executive</option>
+                                        <option value="Consultant" {% if role == "Consultant" %}selected{% endif %}>Consultant</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            
+                            <div>
+                                <button type="reset" class="btn btn-outline-secondary me-3">
+                                    <i class="fas fa-redo me-2"></i>Reset Form
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Search Employees
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Advanced Search Tab -->
+            <div class="tab-pane fade" id="advanced" role="tabpanel">
+                <div class="search-container">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h4><i class="fas fa-cogs me-2 text-primary"></i>Advanced Employee Search</h4>
+                            <p class="text-muted mb-0">Use multiple criteria and advanced filters to find employees</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <span class="search-type-badge badge-advanced">Advanced Search</span>
+                            <button class="btn btn-outline-primary btn-sm" id="clearAdvancedBtn">
+                                <i class="fas fa-redo me-1"></i> Clear
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <form action="{% url 'filter_emp' %}" method="POST" id="advancedSearchForm">
+                        {% csrf_token %}
+                        
+                        <!-- Active Filters Display -->
+                        <div class="search-options mb-4">
+                            <h6 class="mb-3"><i class="fas fa-filter me-2 text-primary"></i>Active Filters</h6>
+                            <div id="activeFilters">
+                                <!-- Filters will be added here dynamically -->
+                            </div>
+                            <p class="text-muted small mt-2 mb-0" id="noFiltersText">No filters applied yet</p>
+                        </div>
+                        
+                        <!-- Personal Details Section -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-id-card me-2"></i>Personal Details</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Name (Any Part)</label>
+                                    <input type="text" class="form-control" name="adv_name" id="adv_name" placeholder="Search in name">
+                                </div>
+                                
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Phone Number</label>
+                                    <input type="text" class="form-control" name="adv_phone" id="adv_phone" placeholder="Enter phone number">
+                                </div>
+                                
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Email Domain</label>
+                                    <select class="form-select" name="adv_email_domain" id="adv_email_domain">
+                                        <option value="">Any Domain</option>
+                                        <option value="@company.com">@company.com</option>
+                                        <option value="@gmail.com">@gmail.com</option>
+                                        <option value="@yahoo.com">@yahoo.com</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Details Section -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-briefcase me-2"></i>Job Details</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Department</label>
+                                    <select class="form-select select2-multiple" name="adv_dept[]" id="adv_dept" multiple="multiple">
+                                        <option value="IT">IT</option>
+                                        <option value="Sales">Sales</option>
+                                        <option value="Finance">Finance</option>
+                                        <option value="HR">HR</option>
+                                        <option value="Marketing">Marketing</option>
+                                        <option value="Operations">Operations</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Role</label>
+                                    <select class="form-select select2-multiple" name="adv_role[]" id="adv_role" multiple="multiple">
+                                        <option value="Developer">Developer</option>
+                                        <option value="Manager">Manager</option>
+                                        <option value="Analyst">Analyst</option>
+                                        <option value="Support">Support</option>
+                                        <option value="Executive">Executive</option>
+                                        <option value="Consultant">Consultant</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Hire Date Range</label>
+                                    <input type="text" class="form-control" name="adv_hire_date" id="adv_hire_date" placeholder="Select date range">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Employment Status</label>
+                                    <select class="form-select" name="adv_status" id="adv_status">
+                                        <option value="">Any Status</option>
+                                        <option value="Active">Active</option>
+                                        <option value="Inactive">Inactive</option>
+                                        <option value="On Leave">On Leave</option>
+                                        <option value="Probation">Probation</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Compensation Section -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-money-bill-wave me-2"></i>Compensation</h5>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Salary Range</label>
+                                    <div class="range-slider-container">
+                                        <input type="range" class="form-range" id="salaryRange" min="0" max="200000" step="1000" value="0">
+                                        <div class="range-values">
+                                            <span id="minSalaryValue">$0</span>
+                                            <span id="maxSalaryValue">$200,000</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="adv_min_salary" id="adv_min_salary" value="">
+                                    <input type="hidden" name="adv_max_salary" id="adv_max_salary" value="">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Bonus Range</label>
+                                    <div class="range-slider-container">
+                                        <input type="range" class="form-range" id="bonusRange" min="0" max="50000" step="1000" value="0">
+                                        <div class="range-values">
+                                            <span id="minBonusValue">$0</span>
+                                            <span id="maxBonusValue">$50,000</span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="adv_min_bonus" id="adv_min_bonus" value="">
+                                    <input type="hidden" name="adv_max_bonus" id="adv_max_bonus" value="">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Advanced Options -->
+                        <div class="advanced-options">
+                            <h6 class="mb-3"><i class="fas fa-sliders-h me-2 text-primary"></i>Additional Options</h6>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="include_inactive" name="include_inactive">
+                                        <label class="form-check-label" for="include_inactive">
+                                            Include inactive employees
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="sort_by_salary" name="sort_by_salary">
+                                        <label class="form-check-label" for="sort_by_salary">
+                                            Sort by salary (high to low)
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="save_search" name="save_search">
+                                        <label class="form-check-label" for="save_search">
+                                            Save this search for later
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="mt-3">
+                                        <label for="search_name" class="form-label">Search Name (if saving)</label>
+                                        <input type="text" class="form-control" id="search_name" name="search_name" placeholder="My Custom Search">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <button type="button" class="btn btn-outline-primary" id="previewSearchBtn">
+                                <i class="fas fa-eye me-2"></i>Preview Search
+                            </button>
+                            
+                            <div>
+                                <button type="reset" class="btn btn-outline-secondary me-3">
+                                    <i class="fas fa-redo me-2"></i>Reset All
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Advanced Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Saved Searches Tab -->
+            <div class="tab-pane fade" id="saved" role="tabpanel">
+                <div class="search-container">
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h4><i class="fas fa-bookmark me-2 text-primary"></i>Saved Searches</h4>
+                            <p class="text-muted mb-0">Quickly access your frequently used search criteria</p>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            <button class="btn btn-outline-primary btn-sm" id="manageSearchesBtn">
+                                <i class="fas fa-cog me-1"></i> Manage
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="search-history">
+                                <h5 class="mb-3"><i class="fas fa-history me-2 text-primary"></i>Recent Searches</h5>
+                                
+                                <div class="history-item" data-search="name=John&dept=IT">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="history-query">Name: John, Department: IT</span>
+                                        <span class="history-date">Today, 10:30 AM</span>
+                                    </div>
+                                    <div class="text-muted small">3 results found</div>
+                                </div>
+                                
+                                <div class="history-item" data-search="role=Manager&salary_min=80000">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="history-query">Role: Manager, Salary > $80,000</span>
+                                        <span class="history-date">Yesterday, 3:15 PM</span>
+                                    </div>
+                                    <div class="text-muted small">7 results found</div>
+                                </div>
+                                
+                                <div class="history-item" data-search="dept=Sales&status=Active">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="history-query">Department: Sales, Status: Active</span>
+                                        <span class="history-date">Nov 12, 2023</span>
+                                    </div>
+                                    <div class="text-muted small">12 results found</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="saved-search">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">High Salary Employees</h6>
+                                    <i class="fas fa-star text-warning"></i>
+                                </div>
+                                <p class="text-muted small mb-2">Salary > $100,000, Active status</p>
+                                <button class="btn btn-sm btn-outline-primary w-100 use-search-btn" data-search="salary_min=100000&status=Active">
+                                    Use This Search
+                                </button>
+                            </div>
+                            
+                            <div class="saved-search">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">IT Department</h6>
+                                    <i class="far fa-star text-muted"></i>
+                                </div>
+                                <p class="text-muted small mb-2">All IT department employees</p>
+                                <button class="btn btn-sm btn-outline-primary w-100 use-search-btn" data-search="dept=IT">
+                                    Use This Search
+                                </button>
+                            </div>
+                            
+                            <div class="saved-search">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h6 class="mb-0">Managers</h6>
+                                    <i class="far fa-star text-muted"></i>
+                                </div>
+                                <p class="text-muted small mb-2">All managerial roles</p>
+                                <button class="btn btn-sm btn-outline-primary w-100 use-search-btn" data-search="role=Manager">
+                                    Use This Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted">You can save searches from the Advanced Search tab for quick access later.</p>
+                        <button class="btn btn-outline-primary" id="goToAdvancedBtn">
+                            <i class="fas fa-cogs me-2"></i>Go to Advanced Search
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results Section -->
+        <div class="results-container" id="resultsSection" style="{% if not emps %}display: none;{% endif %}">
+            <div class="results-header">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <h4 class="mb-0"><i class="fas fa-users me-2 text-primary"></i>Search Results</h4>
+                        <p class="results-count mb-0" id="resultsCount">
+                            {% if emps %}
+                                {{ emps|length }} employee{% if emps|length != 1 %}s{% endif %} found
+                            {% else %}
+                                0 employees found
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="export-options">
+                            <button class="btn btn-outline-primary btn-sm" id="exportPDFBtn">
+                                <i class="fas fa-file-pdf me-1"></i> PDF
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm" id="exportCSVBtn">
+                                <i class="fas fa-file-csv me-1"></i> CSV
+                            </button>
+                            <button class="btn btn-outline-primary btn-sm" id="printResultsBtn">
+                                <i class="fas fa-print me-1"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Loading Spinner -->
+            <div class="loading-spinner" id="resultsLoading">
+                <div class="spinner"></div>
+                <p>Searching employees...</p>
+            </div>
+            
+            <!-- Results Container -->
+            <div id="resultsContainer">
+                {% if emps %}
+                    {% for emp in emps %}
+                    <div class="employee-card">
+                        <div class="d-flex align-items-center">
+                            <div class="employee-avatar">
+                                <img src="https://ui-avatars.com/api/?name={{ emp.first_name }}+{{ emp.last_name }}&background=4361ee&color=fff&size=70" 
+                                     alt="{{ emp.first_name }} {{ emp.last_name }}">
+                            </div>
+                            <div class="employee-info flex-grow-1">
+                                <h5>{{ emp.first_name }} {{ emp.last_name }}</h5>
+                                <p class="mb-1">
+                                    <i class="fas fa-briefcase me-1 text-muted"></i> {{ emp.role.name }}
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-building me-1 text-muted"></i> {{ emp.dept.name }}
+                                </p>
+                                <p class="mb-1">
+                                    <i class="fas fa-phone me-1 text-muted"></i> {{ emp.phone }}
+                                </p>
+                                <div class="mt-2">
+                                    <span class="department-badge me-2">{{ emp.dept.name }}</span>
+                                    <span class="role-badge me-2">{{ emp.role.name }}</span>
+                                    <span class="salary-badge">${{ emp.salary }}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <a href="/view_emp/{{ emp.id }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye me-1"></i> View
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results" id="noResults">
+                        <i class="fas fa-search"></i>
+                        <h4>No Employees Found</h4>
+                        <p class="mb-4">Try adjusting your search criteria or use fewer filters</p>
+                        <button class="btn btn-outline-primary" id="adjustSearchBtn">
+                            <i class="fas fa-sliders-h me-2"></i>Adjust Search
+                        </button>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <!-- Pagination (if needed) -->
+            {% if emps and emps|length > 10 %}
+            <div class="d-flex justify-content-center mt-4">
+                <nav aria-label="Search results pagination">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3"><i class="fas fa-users me-2"></i>EmpManagePro</h5>
+                    
+                </div>
+                <div class="col-md-6 text-end">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Select2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    <!-- Date Range Picker -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Select2 for multi-select dropdowns
+            $('.select2-multiple').select2({
+                placeholder: "Select options",
+                allowClear: true
+            });
+            
+            // Initialize Date Range Picker
+            $('#adv_hire_date').daterangepicker({
+                opens: 'left',
+                locale: {
+                    format: 'YYYY-MM-DD',
+                    separator: ' to ',
+                    applyLabel: 'Apply',
+                    cancelLabel: 'Cancel',
+                    fromLabel: 'From',
+                    toLabel: 'To',
+                    customRangeLabel: 'Custom',
+                    weekLabel: 'W',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                }
+            });
+            
+            // Salary range slider
+            const salaryRange = document.getElementById('salaryRange');
+            const minSalaryValue = document.getElementById('minSalaryValue');
+            const maxSalaryValue = document.getElementById('maxSalaryValue');
+            const advMinSalary = document.getElementById('adv_min_salary');
+            const advMaxSalary = document.getElementById('adv_max_salary');
+            
+            salaryRange.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                minSalaryValue.textContent = '$0';
+                maxSalaryValue.textContent = '$' + value.toLocaleString();
+                advMinSalary.value = '0';
+                advMaxSalary.value = value.toString();
+                
+                updateActiveFilters('salary', `Salary: $0 - $${value.toLocaleString()}`);
+            });
+            
+            // Bonus range slider
+            const bonusRange = document.getElementById('bonusRange');
+            const minBonusValue = document.getElementById('minBonusValue');
+            const maxBonusValue = document.getElementById('maxBonusValue');
+            const advMinBonus = document.getElementById('adv_min_bonus');
+            const advMaxBonus = document.getElementById('adv_max_bonus');
+            
+            bonusRange.addEventListener('input', function() {
+                const value = parseInt(this.value);
+                minBonusValue.textContent = '$0';
+                maxBonusValue.textContent = '$' + value.toLocaleString();
+                advMinBonus.value = '0';
+                advMaxBonus.value = value.toString();
+                
+                updateActiveFilters('bonus', `Bonus: $0 - $${value.toLocaleString()}`);
+            });
+            
+            // Active filters tracking
+            const activeFilters = {};
+            
+            function updateActiveFilters(key, label) {
+                const activeFiltersContainer = document.getElementById('activeFilters');
+                const noFiltersText = document.getElementById('noFiltersText');
+                
+                if (label) {
+                    activeFilters[key] = label;
+                    
+                    // Create or update filter tag
+                    if (!document.getElementById(`filter-${key}`)) {
+                        const filterTag = document.createElement('div');
+                        filterTag.className = 'filter-tag';
+                        filterTag.id = `filter-${key}`;
+                        filterTag.innerHTML = `
+                            ${label}
+                            <span class="close-btn" data-key="${key}">&times;</span>
+                        `;
+                        activeFiltersContainer.appendChild(filterTag);
+                    } else {
+                        document.getElementById(`filter-${key}`).innerHTML = `
+                            ${label}
+                            <span class="close-btn" data-key="${key}">&times;</span>
+                        `;
+                    }
+                    
+                    noFiltersText.style.display = 'none';
+                } else if (key && activeFilters[key]) {
+                    // Remove specific filter
+                    delete activeFilters[key];
+                    const filterElement = document.getElementById(`filter-${key}`);
+                    if (filterElement) {
+                        filterElement.remove();
+                    }
+                } else {
+                    // Clear all filters
+                    Object.keys(activeFilters).forEach(k => {
+                        delete activeFilters[k];
+                    });
+                    activeFiltersContainer.innerHTML = '';
+                    noFiltersText.style.display = 'block';
+                }
+                
+                // Update no filters text if all filters are removed
+                if (Object.keys(activeFilters).length === 0) {
+                    noFiltersText.style.display = 'block';
+                }
+            }
+            
+            // Close filter tag
+            document.getElementById('activeFilters').addEventListener('click', function(e) {
+                if (e.target.classList.contains('close-btn')) {
+                    const key = e.target.getAttribute('data-key');
+                    updateActiveFilters(key);
+                    
+                    // Clear corresponding form field
+                    if (key === 'salary') {
+                        salaryRange.value = 0;
+                        maxSalaryValue.textContent = '$200,000';
+                        advMaxSalary.value = '';
+                    } else if (key === 'bonus') {
+                        bonusRange.value = 0;
+                        maxBonusValue.textContent = '$50,000';
+                        advMaxBonus.value = '';
+                    } else if (key === 'dept') {
+                        $('#adv_dept').val(null).trigger('change');
+                    } else if (key === 'role') {
+                        $('#adv_role').val(null).trigger('change');
+                    } else if (key === 'name') {
+                        document.getElementById('adv_name').value = '';
+                    } else if (key === 'phone') {
+                        document.getElementById('adv_phone').value = '';
+                    } else if (key === 'hire_date') {
+                        document.getElementById('adv_hire_date').value = '';
+                    } else if (key === 'status') {
+                        document.getElementById('adv_status').value = '';
+                    }
+                }
+            });
+            
+            // Update filters when form fields change
+            document.getElementById('adv_name').addEventListener('input', function() {
+                if (this.value) {
+                    updateActiveFilters('name', `Name: ${this.value}`);
+                } else {
+                    updateActiveFilters('name');
+                }
+            });
+            
+            document.getElementById('adv_phone').addEventListener('input', function() {
+                if (this.value) {
+                    updateActiveFilters('phone', `Phone: ${this.value}`);
+                } else {
+                    updateActiveFilters('phone');
+                }
+            });
+            
+            $('#adv_dept').on('change', function() {
+                const values = $(this).val();
+                if (values && values.length > 0) {
+                    updateActiveFilters('dept', `Dept: ${values.join(', ')}`);
+                } else {
+                    updateActiveFilters('dept');
+                }
+            });
+            
+            $('#adv_role').on('change', function() {
+                const values = $(this).val();
+                if (values && values.length > 0) {
+                    updateActiveFilters('role', `Role: ${values.join(', ')}`);
+                } else {
+                    updateActiveFilters('role');
+                }
+            });
+            
+            document.getElementById('adv_hire_date').addEventListener('change', function() {
+                if (this.value) {
+                    updateActiveFilters('hire_date', `Hired: ${this.value}`);
+                } else {
+                    updateActiveFilters('hire_date');
+                }
+            });
+            
+            document.getElementById('adv_status').addEventListener('change', function() {
+                if (this.value) {
+                    updateActiveFilters('status', `Status: ${this.value}`);
+                } else {
+                    updateActiveFilters('status');
+                }
+            });
+            
+            // Clear buttons
+            document.getElementById('clearBasicBtn').addEventListener('click', function() {
+                document.getElementById('basicSearchForm').reset();
+            });
+            
+            document.getElementById('clearAdvancedBtn').addEventListener('click', function() {
+                document.getElementById('advancedSearchForm').reset();
+                $('#adv_dept').val(null).trigger('change');
+                $('#adv_role').val(null).trigger('change');
+                salaryRange.value = 0;
+                bonusRange.value = 0;
+                maxSalaryValue.textContent = '$200,000';
+                maxBonusValue.textContent = '$50,000';
+                updateActiveFilters(); // Clear all
+            });
+            
+            // Preview search button
+            document.getElementById('previewSearchBtn').addEventListener('click', function() {
+                // Show loading spinner
+                document.getElementById('resultsLoading').style.display = 'block';
+                document.getElementById('resultsContainer').style.display = 'none';
+                
+                // Simulate search
+                setTimeout(() => {
+                    document.getElementById('resultsLoading').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                    document.getElementById('resultsSection').style.display = 'block';
+                    
+                    // Show sample results for demo
+                    const resultsContainer = document.getElementById('resultsContainer');
+                    resultsContainer.innerHTML = `
+                        <div class="employee-card">
+                            <div class="d-flex align-items-center">
+                                <div class="employee-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=John+Doe&background=4361ee&color=fff&size=70" alt="John Doe">
+                                </div>
+                                <div class="employee-info flex-grow-1">
+                                    <h5>John Doe</h5>
+                                    <p class="mb-1">
+                                        <i class="fas fa-briefcase me-1 text-muted"></i> Software Developer
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-building me-1 text-muted"></i> IT Department
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-phone me-1 text-muted"></i> (555) 123-4567
+                                    </p>
+                                    <div class="mt-2">
+                                        <span class="department-badge me-2">IT</span>
+                                        <span class="role-badge me-2">Developer</span>
+                                        <span class="salary-badge">$85,000</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i> View
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="employee-card">
+                            <div class="d-flex align-items-center">
+                                <div class="employee-avatar">
+                                    <img src="https://ui-avatars.com/api/?name=Jane+Smith&background=4361ee&color=fff&size=70" alt="Jane Smith">
+                                </div>
+                                <div class="employee-info flex-grow-1">
+                                    <h5>Jane Smith</h5>
+                                    <p class="mb-1">
+                                        <i class="fas fa-briefcase me-1 text-muted"></i> IT Manager
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-building me-1 text-muted"></i> IT Department
+                                    </p>
+                                    <p class="mb-1">
+                                        <i class="fas fa-phone me-1 text-muted"></i> (555) 987-6543
+                                    </p>
+                                    <div class="mt-2">
+                                        <span class="department-badge me-2">IT</span>
+                                        <span class="role-badge me-2">Manager</span>
+                                        <span class="salary-badge">$120,000</span>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye me-1"></i> View
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.getElementById('resultsCount').textContent = '2 employees found';
+                    document.getElementById('noResults').style.display = 'none';
+                }, 1500);
+            });
+            
+            // Use saved search buttons
+            document.querySelectorAll('.use-search-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const searchQuery = this.getAttribute('data-search');
+                    alert(`Loading saved search: ${searchQuery}`);
+                    // In a real app, you would parse the query and populate the form
+                    
+                    // Switch to basic tab for demo
+                    const basicTab = new bootstrap.Tab(document.getElementById('basic-tab'));
+                    basicTab.show();
+                });
+            });
+            
+            // History items
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    const searchQuery = this.getAttribute('data-search');
+                    alert(`Loading recent search: ${searchQuery}`);
+                    // In a real app, you would parse the query and populate the form
+                });
+            });
+            
+            // Go to advanced button
+            document.getElementById('goToAdvancedBtn').addEventListener('click', function() {
+                const advancedTab = new bootstrap.Tab(document.getElementById('advanced-tab'));
+                advancedTab.show();
+            });
+            
+            // Adjust search button
+            document.getElementById('adjustSearchBtn').addEventListener('click', function() {
+                const basicTab = new bootstrap.Tab(document.getElementById('basic-tab'));
+                basicTab.show();
+            });
+            
+            // Export buttons
+            document.getElementById('exportPDFBtn').addEventListener('click', function() {
+                alert('PDF export would be generated here');
+            });
+            
+            document.getElementById('exportCSVBtn').addEventListener('click', function() {
+                alert('CSV export would be generated here');
+            });
+            
+            document.getElementById('printResultsBtn').addEventListener('click', function() {
+                window.print();
+            });
+            
+            // Manage searches button
+            document.getElementById('manageSearchesBtn').addEventListener('click', function() {
+                alert('Manage saved searches dialog would open here');
+            });
+            
+            // Form submission handling
+            document.getElementById('basicSearchForm').addEventListener('submit', function(e) {
+                // Show loading
+                document.getElementById('resultsLoading').style.display = 'block';
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // The actual form submission will happen normally
+                // This is just for visual feedback
+                setTimeout(() => {
+                    document.getElementById('resultsLoading').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                }, 1000);
+            });
+            
+            document.getElementById('advancedSearchForm').addEventListener('submit', function(e) {
+                // Show loading
+                document.getElementById('resultsLoading').style.display = 'block';
+                document.getElementById('resultsContainer').style.display = 'none';
+                document.getElementById('resultsSection').style.display = 'block';
+                
+                // The actual form submission will happen normally
+                // This is just for visual feedback
+                setTimeout(() => {
+                    document.getElementById('resultsLoading').style.display = 'none';
+                    document.getElementById('resultsContainer').style.display = 'block';
+                }, 1000);
+            });
+        });
+    </script>
+</body>
+</html>

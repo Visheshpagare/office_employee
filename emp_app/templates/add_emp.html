@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Add New Employee | Employee Management System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3a0ca3;
+            --success-color: #4cc9f0;
+            --warning-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--primary-color) !important;
+        }
+        
+        .main-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: var(--card-shadow);
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+            box-shadow: var(--card-shadow);
+            border-top: 5px solid var(--primary-color);
+        }
+        
+        .form-header {
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-right: 1rem;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-control, .form-select {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+        }
+        
+        .required::after {
+            content: " *";
+            color: #e74c3c;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(58, 12, 163, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            padding: 0.75rem 2rem;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: var(--transition);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+            border-color: #545b62;
+            transform: translateY(-3px);
+        }
+        
+        .form-section {
+            background-color: #f9fafc;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .footer {
+            background: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+        
+        .form-help {
+            background-color: #e8f4fd;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 2rem;
+            border-left: 4px solid var(--success-color);
+        }
+        
+        .department-options, .role-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        .dept-option, .role-option {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .dept-option input[type="radio"], .role-option input[type="radio"] {
+            display: none;
+        }
+        
+        .dept-option label, .role-option label {
+            display: block;
+            padding: 1rem;
+            background-color: #f5f7fb;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .dept-option input[type="radio"]:checked + label,
+        .role-option input[type="radio"]:checked + label {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .dept-option label:hover, .role-option label:hover {
+            border-color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            .department-options, .role-options {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-users me-2"></i>EmpManagePro
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/all_emp">All Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/add_emp">Add Employee</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/remove_emp">Remove Employee</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>Admin
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="#">Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Header -->
+    <div class="main-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-5 fw-bold">Add New Employee</h1>
+                    <p class="lead mb-0">Fill out the form below to add a new employee to the system. All fields marked with * are required.</p>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-user-plus fa-5x" style="opacity: 0.8;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Form Container -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Form -->
+                <div class="form-container">
+                    <div class="form-header">
+                        <div class="d-flex align-items-center">
+                            <div class="form-icon">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div>
+                                <h3 class="mb-1">Employee Information Form</h3>
+                                <p class="text-muted mb-0">Please provide accurate information for the new employee</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form action="/add_emp" method="post" id="addEmployeeForm">
+                        {% csrf_token %}
+                        
+                        <!-- Personal Information Section -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-user me-2"></i>Personal Information</h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="first_name" class="form-label required">First Name</label>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" 
+                                           value="{{first_name}}" placeholder="Enter first name" required>
+                                    <div class="form-text">Legal first name as per official documents</div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="last_name" class="form-label required">Last Name</label>
+                                    <input type="text" class="form-control" id="last_name" name="last_name" 
+                                           value="{{last_name}}" placeholder="Enter last name" required>
+                                    <div class="form-text">Legal surname/family name</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label required">Phone Number</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                        <input type="tel" class="form-control" id="phone" name="phone" 
+                                               value="{{phone}}" placeholder="Enter 10-digit phone number" required>
+                                    </div>
+                                    <div class="form-text">Primary contact number</div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control" id="email" name="email" 
+                                               placeholder="Enter email address">
+                                    </div>
+                                    <div class="form-text">Company email will be generated automatically</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="dob" class="form-label">Date of Birth</label>
+                                    <input type="date" class="form-control" id="dob" name="dob">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" 
+                                           placeholder="Enter residential address">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Job Details Section -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-briefcase me-2"></i>Job Details</h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label required">Department</label>
+                                    <div class="department-options">
+                                        <div class="dept-option">
+                                            <input type="radio" id="dept_1" name="dept" value="1" {% if dept == "1" %}checked{% endif %}>
+                                            <label for="dept_1">
+                                                <i class="fas fa-code fa-lg mb-2 d-block"></i>
+                                                IT
+                                            </label>
+                                        </div>
+                                        <div class="dept-option">
+                                            <input type="radio" id="dept_2" name="dept" value="2" {% if dept == "2" %}checked{% endif %}>
+                                            <label for="dept_2">
+                                                <i class="fas fa-chart-line fa-lg mb-2 d-block"></i>
+                                                Sales
+                                            </label>
+                                        </div>
+                                        <div class="dept-option">
+                                            <input type="radio" id="dept_3" name="dept" value="3" {% if dept == "3" %}checked{% endif %}>
+                                            <label for="dept_3">
+                                                <i class="fas fa-calculator fa-lg mb-2 d-block"></i>
+                                                Finance
+                                            </label>
+                                        </div>
+                                        <div class="dept-option">
+                                            <input type="radio" id="dept_4" name="dept" value="4" {% if dept == "4" %}checked{% endif %}>
+                                            <label for="dept_4">
+                                                <i class="fas fa-users fa-lg mb-2 d-block"></i>
+                                                HR
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <input type="number" id="dept" name="dept" value="{{dept}}" style="display: none;">
+                                </div>
+                                
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label required">Role</label>
+                                    <div class="role-options">
+                                        <div class="role-option">
+                                            <input type="radio" id="role_1" name="role" value="1" {% if role == "1" %}checked{% endif %}>
+                                            <label for="role_1">
+                                                <i class="fas fa-laptop-code fa-lg mb-2 d-block"></i>
+                                                Developer
+                                            </label>
+                                        </div>
+                                        <div class="role-option">
+                                            <input type="radio" id="role_2" name="role" value="2" {% if role == "2" %}checked{% endif %}>
+                                            <label for="role_2">
+                                                <i class="fas fa-user-tie fa-lg mb-2 d-block"></i>
+                                                Manager
+                                            </label>
+                                        </div>
+                                        <div class="role-option">
+                                            <input type="radio" id="role_3" name="role" value="3" {% if role == "3" %}checked{% endif %}>
+                                            <label for="role_3">
+                                                <i class="fas fa-headset fa-lg mb-2 d-block"></i>
+                                                Support
+                                            </label>
+                                        </div>
+                                        <div class="role-option">
+                                            <input type="radio" id="role_4" name="role" value="4" {% if role == "4" %}checked{% endif %}>
+                                            <label for="role_4">
+                                                <i class="fas fa-chart-bar fa-lg mb-2 d-block"></i>
+                                                Analyst
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <input type="number" id="role" name="role" value="{{role}}" style="display: none;">
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="hire_date" class="form-label">Hire Date</label>
+                                    <input type="date" class="form-control" id="hire_date" name="hire_date" 
+                                           value="{{hire_date}}">
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="employee_id" class="form-label">Employee ID</label>
+                                    <input type="text" class="form-control" id="employee_id" name="employee_id" 
+                                           placeholder="Auto-generated if left empty">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Compensation Section -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-money-bill-wave me-2"></i>Compensation</h4>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="salary" class="form-label required">Base Salary ($)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="salary" name="salary" 
+                                               value="{{salary}}" placeholder="Enter annual salary" min="0" step="1000" required>
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                    <div class="form-text">Annual base salary before taxes and deductions</div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="bonus" class="form-label">Bonus ($)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="bonus" name="bonus" 
+                                               value="{{bonus}}" placeholder="Enter bonus amount" min="0">
+                                        <span class="input-group-text">.00</span>
+                                    </div>
+                                    <div class="form-text">Annual performance bonus (if applicable)</div>
+                                </div>
+                            </div>
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="pay_frequency" class="form-label">Pay Frequency</label>
+                                    <select class="form-select" id="pay_frequency" name="pay_frequency">
+                                        <option value="monthly">Monthly</option>
+                                        <option value="biweekly">Bi-weekly</option>
+                                        <option value="weekly">Weekly</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="currency" class="form-label">Currency</label>
+                                    <select class="form-select" id="currency" name="currency">
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                        <option value="GBP">GBP (£)</option>
+                                        <option value="INR">INR (₹)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Additional Information -->
+                        <div class="form-section">
+                            <h4 class="section-title"><i class="fas fa-info-circle me-2"></i>Additional Information</h4>
+                            
+                            <div class="mb-3">
+                                <label for="emergency_contact" class="form-label">Emergency Contact</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                                    <input type="tel" class="form-control" id="emergency_contact" name="emergency_contact" 
+                                           placeholder="Enter emergency contact number">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="notes" class="form-label">Notes / Additional Information</label>
+                                <textarea class="form-control" id="notes" name="notes" rows="3" 
+                                          placeholder="Any additional information about the employee"></textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Help Text -->
+                        <div class="form-help">
+                            <h5><i class="fas fa-lightbulb me-2"></i>Quick Tips</h5>
+                            <ul class="mb-0">
+                                <li>Ensure all required fields (marked with *) are filled before submission</li>
+                                <li>Double-check phone numbers and email addresses for accuracy</li>
+                                <li>Employee ID will be auto-generated if left empty</li>
+                                <li>You can update employee details later if needed</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Form Buttons -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="/" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                            </a>
+                            
+                            <div>
+                                <button type="reset" class="btn btn-outline-secondary me-3">
+                                    <i class="fas fa-redo me-2"></i>Reset Form
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-2"></i>Add Employee
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="mb-3"><i class="fas fa-users me-2"></i>EmpManagePro</h5>
+                    
+                </div>
+                <div class="col-md-6 text-end">
+                    <p class="mb-0">&copy; 2023 All rights reserved. | Project for Faculty Presentation</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
